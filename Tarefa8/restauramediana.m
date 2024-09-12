@@ -1,0 +1,1 @@
+function figura_out = restaura_mediana(figura_in, N)
