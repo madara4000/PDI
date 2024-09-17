@@ -1,0 +1,1 @@
+saida = quantizar(entrada, bitsY, bitsCb, bitsCr)
