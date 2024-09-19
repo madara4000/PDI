@@ -1,4 +1,6 @@
 function decompondo(verde,azul,vermelho)=decompoem(imagem);
+    imagemrgb= imread(imagem);
+    img_rgb = im2double(img_rgb); 
     vermelho = imagem;
     verde = imagem;
     azul = imagem;

@@ -1,1 +1,2 @@
-saida = quantiza(entrada, bitsR, bitsG, bitsB)
+saida = quantiza(entrada, bitsR, bitsG, bitsB);
+inread=entrada;
