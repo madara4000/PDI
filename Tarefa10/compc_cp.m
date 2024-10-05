@@ -1,0 +1,1 @@
+function [bpp, PSNR] = compc_cp(imagem, qualidade)

@@ -1,0 +1,1 @@
+function PSNR= CPSNR(imagem1, imagem2)
