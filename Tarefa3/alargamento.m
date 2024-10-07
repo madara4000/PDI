@@ -28,7 +28,7 @@ I_gamma_equal = imadjust(I, [], [], 1);
 % Transformação de intensidade com correção gama (gama > 1)
 I_gamma_high = imadjust(I, [], [], 2);
 
-% Exibir as imagens transformadas
+
 figure;
 subplot(2,3,1), imshow(I), title('Imagem Original');
 subplot(2,3,2), imshow(I_linear_identity), title('Linear Identidade');
@@ -37,7 +37,7 @@ subplot(2,3,4), imshow(I_gamma_low), title('Gama < 1');
 subplot(2,3,5), imshow(I_gamma_equal), title('Gama = 1');
 subplot(2,3,6), imshow(I_gamma_high), title('Gama > 1');
 
-% Gerar e exibir os histogramas
+
 figure;
 subplot(2,3,1), imhist(I), title('Histograma Original');
 subplot(2,3,2), imhist(I_linear_identity), title('Linear Identidade');
