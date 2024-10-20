@@ -13,18 +13,18 @@
 % function
 % nova_figura = contraste(figura)
 % Exemplo de chamada da função:
-% contraste (‘lena_contraste.
+% contraste ('lena_contraste.bmp')
 function nova_figura = contraste(figura)
 
     img = imread(figura);
-    
-    
+
+
     if size(img, 3) == 3
         error('A imagem precisa estar em escala de cinza.');
     end
-    
+
     figure;
-    subplot(1, 2, 1);
+    subplot(2, 2, 2);
     imhist(img);
     title('Histograma da imagem original');
 
@@ -33,22 +33,22 @@ function nova_figura = contraste(figura)
     max_val = max(img_contraste(:));
     img_contraste = (img_contraste - min_val) * (255 / (max_val - min_val));
     img_contraste = uint8(img_contraste);
-    
-  
-    subplot(1, 2, 2);
+
+
+    subplot(2, 2, 4);
     imhist(img_contraste);
     title('Histograma da imagem com contraste ajustado');
-    
+
 
     nova_figura = 'imagem_com_contraste_alargado.png';
     imwrite(img_contraste, nova_figura);
-    
-    
+
+
     figure;
-    subplot(1, 2, 1);
+    subplot(2, 2, 1);
     imshow(img);
     title('Imagem Original');
-    subplot(1, 2, 2);
+    subplot(2, 2, 3);
     imshow(img_contraste);
     title('Imagem com Contraste Alargado');
 end
