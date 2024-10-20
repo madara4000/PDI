@@ -1,37 +1,37 @@
-%Receba uma imagem em escala de cinzas;
-% Decomponha com uma pirâmide de dois níveis (ver exemplo abaixo)
-%sando dwt2
-%Utilize waveletHaar
-%Utilize wavelet Daubechies 10 (db10)
-%%Exemplo: [cA,cH,cV,cD] = dwt2(X,’haar','mode','per');
+% Passo 1: Carregar o pacote LTFAT
+pkg load ltfat;
 
-imagem = imread('C:\Users\yagom\projects\PDI\Tarefa7\barbara_gray.bmp');
+% Passo 2: Carregar a imagem em escala de cinzas
+img = imread('C:\Users\yagom\projects\PDI\Tarefa7\barbara_gray.bmp'); % Coloque o caminho correto para sua imagem
 
 
-if size(imagem, 3) == 3
-    imagem_gray = rgb2gray(imagem);
-else
-    imagem_gray = imagem;
+% Passo 3: Verificar se a imagem já está em escala de cinzas
+if ndims(img) == 3
+    img = rgb2gray(img);
 end
 
 
-imagem_gray = im2double(imagem_gray);
+[cA1, cH1, cV1, cD1] = fwt2(img, 'haar', 'mode', 'per'); % Primeiro nível
 
 
-[cA1, cH1, cV1, cD1] = dwt2(imagem_gray, 'haar', 'mode', 'per');
+[cA2, cH2, cV2, cD2] = fwt2(cA1, 'haar', 'mode', 'per'); % Segundo nível
 
 
-[cA2, cH2, cV2, cD2] = dwt2(cA1, 'db10', 'mode', 'per');
+[cA1_db10, cH1_db10, cV1_db10, cD1_db10] = fwt2(img, 'db10', 'mode', 'per'); % Primeiro nível
+
+
+[cA2_db10, cH2_db10, cV2_db10, cD2_db10] = fwt2(cA1_db10, 'db10', 'mode', 'per'); % Segundo nível
 
 
 figure;
-subplot(2, 2, 1); imshow(cA1, []); title('Aproximação Haar (cA1)');
-subplot(2, 2, 2); imshow(cH1, []); title('Detalhes Horizontais Haar (cH1)');
-subplot(2, 2, 3); imshow(cV1, []); title('Detalhes Verticais Haar (cV1)');
-subplot(2, 2, 4); imshow(cD1, []); title('Detalhes Diagonais Haar (cD1)');
+subplot(2, 4, 1); imshow(img, []); title('Imagem Original');
+subplot(2, 4, 2); imshow(cA1, []); title('cA1 (Haar)');
+subplot(2, 4, 3); imshow(cH1, []); title('cH1 (Haar)');
+subplot(2, 4, 4); imshow(cD1, []); title('cD1 (Haar)');
+subplot(2, 4, 5); imshow(cA2, []); title('cA2 (Haar)');
 
-figure;
-subplot(2, 2, 1); imshow(cA2, []); title('Aproximação Daubechies (cA2)');
-subplot(2, 2, 2); imshow(cH2, []); title('Detalhes Horizontais Daubechies (cH2)');
-subplot(2, 2, 3); imshow(cV2, []); title('Detalhes Verticais Daubechies (cV2)');
-subplot(2, 2, 4); imshow(cD2, []); title('Detalhes Diagonais Daubechies (cD2)');
+subplot(2, 4, 6); imshow(cA1_db10, []); title('cA1 (Daubechies 10)');
+subplot(2, 4, 7); imshow(cH1_db10, []); title('cH1 (Daubechies 10)');
+subplot(2, 4, 8); imshow(cD1_db10, []); title('cD1 (Daubechies 10)');
+
+

@@ -1,37 +1,37 @@
-%Utilize os passos abaixo para aplicar a Transformada de Fourier e
-%visualizar seu resultado
-%Receba uma imagem em escala de cinza;
- %Aplique a Transformada de Fourier utilizando a função fft2
- %Exiba o resultado, como mostrado abaixo:
-%Como o resultado está em números complexos é preciso visualizar o
-%módulo utilizando a função abs;
-%Como os valores são muito altos, devemos utilizar a função log
-%para melhor visualização;
-%imshow(log(abs(trans)), []);
-¨% Para posicionar a frequência zero no centro, utilize a função fftshift
-% Exiba o resultado.
-% Lê a imagem em escala de cinza
+pkg load image
+
 imagem = imread('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp');
 
-% Verifica se a imagem é colorida e converte para escala de cinza se necessário
 if size(imagem, 3) == 3
     imagem_gray = rgb2gray(imagem);
 else
-    imagem_gray = imagem; % Se já estiver em escala de cinza
+    imagem_gray = imagem;
 end
 
-% Aplica a Transformada de Fourier bidimensional
-trans = fft2(double(imagem_gray));
+[M, N] = size(imagem_gray);
+[U, V] = meshgrid(-N/2:N/2-1, -M/2:M/2-1);
+D = sqrt(U.^2 + V.^2);  % Distância do centro
 
-% Centraliza a frequência zero no centro da imagem
-trans_shifted = fftshift(trans);
+% 1. Eliminar Bordas Verticais
+mascara1 = ones(M, N);
+mascara1(:, round(N/2):end) = 0;  % Eliminar bordas verticais
+img_filtrada1 = filtra_freq('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp', mascara1);
 
-% Calcula o módulo da transformada
-magnitude = abs(trans_shifted);
+% 2. Passa Baixas
+D0 = 30;
+mascara2 = double(D <= D0);  % Filtro passa-baixa
+img_filtrada2 = filtra_freq('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp', mascara2);
 
-% Aplica a escala logarítmica para melhor visualização
-magnitude_log = log(magnitude + 1); % Adiciona 1 para evitar log(0)
+% 3. Passa Altas
+mascara3 = double(D > D0);  % Filtro passa-alta
+img_filtrada3 = filtra_freq('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp', mascara3);
 
-% Exibe o resultado
-imshow(magnitude_log, []);
-title('Transformada de Fourier - Magnitude (Escala Logarítmica)');
+% 4. Passa Faixa
+D1 = 60;
+mascara4 = double(D >= D0 & D <= D1);  % Filtro passa-faixa
+img_filtrada4 = filtra_freq('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp', mascara4);
+
+% 5. Rejeita Faixa
+mascara5 = double(D < D0 | D > D1);  % Filtro rejeita-faixa
+img_filtrada5 = filtra_freq('C:\Users\yagom\projects\PDI\Tarefa6\barbara_gray.bmp', mascara5);
+
