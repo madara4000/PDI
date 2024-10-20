@@ -5,27 +5,24 @@
 %Transformação de intensidade linear com ajuste variando entre max e
 %min da imagem de entrada;
 
-Transformação de intensidade com correção gama, usando valores de
-gama < 1, gama = 1, gama > 1.
-Gere um histograma para cada imagem transformada e compare com o
-histograma da imagem original.
-% Carregar uma imagem em escala de cinza
-I = imread('barbara_gray.bmp');  % Você pode substituir pela imagem que deseja usar
-I = im2double(I);  % Converter para double para operações de intensidade
+%Transformação de intensidade com correção gama, usando valores de
+%gama < 1, gama = 1, gama > 1.
+%Gere um histograma para cada imagem transformada e compare com o
+%histograma da imagem original.
+I = imread('barbara_gray.bmp');  
+I = im2double(I);  
 
-% Transformação de intensidade linear identidade
 I_linear_identity = imadjust(I, [0 1], [0 1]);
 
-% Transformação de intensidade linear com ajuste variando entre min e max
+
 I_linear_adjust = imadjust(I, stretchlim(I), []);
 
-% Transformação de intensidade com correção gama (gama < 1)
+
 I_gamma_low = imadjust(I, [], [], 0.5);
 
-% Transformação de intensidade com correção gama (gama = 1)
+
 I_gamma_equal = imadjust(I, [], [], 1);
 
-% Transformação de intensidade com correção gama (gama > 1)
 I_gamma_high = imadjust(I, [], [], 2);
 
 
