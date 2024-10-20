@@ -1,70 +1,34 @@
-%Leia uma imagem em escala de cinzas;
-%Binarizea imagem utilizando a função im2bw (utiliza thresholds entre [0 1]);
-%Crie uma função Matlab Octave que:
-%eceba uma imagens binzarizada
-%Receba uma matriz descrevendo o elemento estruturante;
-%Implemente a operação de dilatação sobre a imagem utilizando o elemento
-%estruturante fornecido;
-%Crie uma nova imagem dilatada;
-%Retorne como resultado o nome do arquivo gerado com a nova imagem.
+function imagem_dilatada_nome = dilata(imagem, elemento_estrutante)
+    matriz_extendida = extendMatrix(imagem, elemento_estrutante);
+    imagem_dilatada = zeros(size(imagem, 1), size(imagem, 2));
+    tamanho_elem_est = size(elemento_estrutante);
+    deslocamento_linhas = floor(tamanho_elem_est(1) / 2);
+    deslocamento_colunas = floor(tamanho_elem_est(2) / 2);
 
-function img_dilatada = dilata(imagem, ES)
-   
-    img = imread(imagem);
-
-if size(imagem, 3) == 3
-
-    imagem_gray = rgb2gray(img);
-else
-   
-    imagem_gray = img;
-end
-   
-
-    img_bin = im2bw(img_gray, 0.5); 
-
-   
-    [linhas, colunas] = size(img_bin);
-    
-    [es_linhas, es_colunas] = size(ES);
-    
-    offset_linha = floor(es_linhas / 2);
-    offset_coluna = floor(es_colunas / 2);
-    
-  
-    img_dilatada = zeros(linhas, colunas);
-
-  
-    for i = 1:linhas
-        for j = 1:colunas
-            if img_bin(i, j) == 1  
-             
-                for m = 1:es_linhas
-                    for n = 1:es_colunas
-                        if ES(m, n) == 1  
-                          
-                            linha_nova = i + (m - offset_linha);
-                            coluna_nova = j + (n - offset_coluna);
-                            
-                         
-                            if linha_nova > 0 && linha_nova <= linhas && ...
-                               coluna_nova > 0 && coluna_nova <= colunas
-                                img_dilatada(linha_nova, coluna_nova) = 1;
-                            end
-                        end
-                    end
-                end
-            end
+    for linha = 1:size(imagem_dilatada, 1)
+        for coluna = 1:size(imagem_dilatada, 2)
+            imagem_dilatada(linha, coluna) = aplicaDilatacao(matriz_extendida, elemento_estrutante, linha + deslocamento_linhas, coluna + deslocamento_colunas, deslocamento_colunas, deslocamento_linhas);
         end
     end
 
-    
-    img_dilatada = uint8(img_dilatada * 255); 
-
-
-    nome_arquivo = 'imagem_dilatada_manual.png';
-    imwrite(img_dilatada, nome_arquivo);
-    
-    
-    disp(['Imagem dilatada salva como: ', nome_arquivo]);
+    imagem_dilatada_nome = 'imagem_dilatada.png';
+    imwrite(imagem_dilatada, imagem_dilatada_nome);
 end
+
+function matriz_extendida = extendMatrix(matriz, filtro)
+    tamanho_filtro = size(filtro);
+    deslocamento_linhas = floor(tamanho_filtro(1) / 2);
+    deslocamento_colunas = floor(tamanho_filtro(2) / 2);
+    [linhas_matriz, colunas_matriz] = size(matriz);
+    matriz_extendida = zeros(linhas_matriz + (2 * deslocamento_linhas), colunas_matriz + (2 * deslocamento_colunas));
+    [linhas_ext, colunas_ext] = size(matriz_extendida);
+    matriz_extendida(deslocamento_linhas + 1:linhas_ext - deslocamento_linhas, deslocamento_colunas + 1:colunas_ext - deslocamento_colunas) = matriz(:, :);
+end
+
+function novo_valor = aplicaDilatacao(matriz, elemento_estrutante, linha, coluna, deslocamento_colunas, deslocamento_linhas)
+    matriz_temporaria = matriz(linha - deslocamento_linhas:linha + deslocamento_linhas, coluna - deslocamento_colunas:coluna + deslocamento_colunas) .* elemento_estrutante;
+    novo_valor = sum(sum(matriz_temporaria)) ~= 0;
+end
+
+
+
